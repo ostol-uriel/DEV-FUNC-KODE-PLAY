@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="G.R.A.S.Y.A. Framework: Gradual Reconciliation and Scalable Yield Architecture." />
+    <title>G.R.A.S.Y.A. | Home</title>
+    <link rel="icon" href="DFKP - LOGO.png" type="image/png">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+<nav id="navbar" aria-label="Main Navigation">
+    <div class="logo">
+        <img src="DFKP - LOGO W TEXT.png" alt="G.R.A.S.Y.A. Logo" class="nav-logo">
+        <span>G.R.A.S.Y.A.</span>
+    </div>
+    
+    <div class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="team.html">Team</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+    </button>
+</nav>
+
+<main>
+    <header class="hero">
+        <div class="glow-orb"></div>
+        
+        <div class="hero-content">
+            <div class="hero-badge fade-element delay-1">
+                <span class="pulse"></span> From curious play to subtle grace
+            </div>
+            
+            <h1 class="fade-element delay-2">G.R.A.S.Y.A.</h1>
+            <p class="fade-element delay-3">Gradual Reconciliation and Scalable Yield Architecture</p>
+            
+            <div class="hero-buttons fade-element delay-4">
+                <a href="GRASYA Enterprise Manager 2.2.0.exe" class="btn-primary">Download Installer</a>
+                <a href="GRASYA Enterprise Manager 2.2.0.exe" class="btn-secondary">Download Portable</a>
+            </div>
+            <div class="hero-buttons fade-element delay-4" style="margin-top: 1rem;">
+                <a href="#architecture" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Explore Framework</a>
+            </div>
+
+            <div class="terminal-window fade-element delay-5">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-body">
+                    <p class="typewriter"><span>> docker compose up -d</span></p>
+                    <p class="typewriter"><span>> Container kafka Started</span></p>
+                    <p class="typewriter"><span>> Container connect Started</span></p>
+                    <p class="typewriter"><span>> curl -X POST http://localhost:8000/connectors</span></p>
+                    <p class="typewriter"><span>> Connector 'ecommerce-postgres-source' created </span></p> 
+                    <p class="typewriter"><span>> kafka-console-consumer.sh --topic </span></p>
+                    <p class="typewriter" style="color: var(--accent);"><span>> Data pipeline active.</span></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="architecture" class="section">
+        <h2>Core Methodology</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Trickle-Down Method</h3>
+                <p>Ensures structured flow of data and system integrity across layers, acting as the primary methodology for database modernization.</p>
+            </div>
+            <div class="card">
+                <h3>Reconciliation Engine</h3>
+                <p>Handles conflict resolution and data consistency in real-time distributed systems.</p>
+            </div>
+            <div class="card">
+                <h3>Scalable Yield Core</h3>
+                <p>Optimizes performance under heavy database migration workloads.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt">
+        <h2>System Features</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Relative Zero-Downtime</h3>
+                <p>Maintains high availability for critical applications during massive data synchronization processes.</p>
+            </div>
+            <div class="card">
+                <h3>Distributed Architecture</h3>
+                <p>Scales horizontally to handle complex pipelines and concurrent data workloads seamlessly.</p>
+            </div>
+            <div class="card">
+                <h3>Fault Tolerance</h3>
+                <p>Implements robust recovery mechanisms to prevent data loss during migration bottlenecks.</p>
+            </div>
+            <div class="card">
+                <h3>Cryptographic Validation</h3>
+                <p>Utilizes advanced hash verification to guarantee absolute data integrity between legacy and modern systems.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© <span id="current-year"></span> G.R.A.S.Y.A. Framework</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
