@@ -61,6 +61,58 @@ const lines = document.querySelectorAll('.typewriter');
         observer.observe(card);
     });
 
+    // MANUAL PAGE: TOC SCROLL-SPY + COLLAPSED TOC ON SMALL SCREENS
+    const toc = document.getElementById("manualToc");
+    if (toc) {
+        const tocLinks = [...toc.querySelectorAll("a")];
+        const sections = tocLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+        const setActive = id => tocLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === `#${id}`));
+
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); });
+        }, { rootMargin: "-30% 0px -60% 0px" });
+        sections.forEach(s => spy.observe(s));
+
+        const tocDetails = document.getElementById("tocDetails");
+        if (tocDetails && window.matchMedia("(max-width: 900px)").matches) {
+            tocDetails.open = false;
+            tocLinks.forEach(a => a.addEventListener("click", () => { tocDetails.open = false; }));
+        }
+    }
+
+    // MANUAL PAGE: CLICK A SCREENSHOT TO VIEW IT FULL SIZE
+    const lightbox = document.getElementById("lightbox");
+    if (lightbox) {
+        const boxImg = lightbox.querySelector("img");
+        const boxCaption = lightbox.querySelector("p");
+        let lastFocus = null;
+
+        const closeLightbox = () => {
+            lightbox.classList.remove("open");
+            document.body.style.overflow = "";
+            if (lastFocus) lastFocus.focus();
+        };
+
+        document.querySelectorAll(".manual-figure").forEach(fig => {
+            fig.addEventListener("click", e => {
+                e.preventDefault();
+                boxImg.src = fig.getAttribute("href");
+                boxImg.alt = fig.querySelector("img").alt;
+                const caption = fig.querySelector("span");
+                boxCaption.textContent = caption ? caption.firstChild.textContent.trim() : "";
+                lastFocus = fig;
+                lightbox.classList.add("open");
+                document.body.style.overflow = "hidden";
+                lightbox.querySelector(".lightbox-close").focus();
+            });
+        });
+
+        lightbox.addEventListener("click", closeLightbox);
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+        });
+    }
+
     // SPOTLIGHT HOVER EFFECT FOR CARDS
     const hoverCards = document.querySelectorAll('.card');
     

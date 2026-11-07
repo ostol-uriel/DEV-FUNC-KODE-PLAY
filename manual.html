@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Quick user guide for running a PostgreSQL to MongoDB migration with GRASYA Enterprise Manager." />
+    <title>User Manual | G.R.A.S.Y.A.</title>
+    <link rel="icon" href="DFKP - LOGO.png" type="image/png">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+<nav id="navbar" aria-label="Main Navigation">
+    <div class="logo">
+        <img src="DFKP - LOGO W TEXT.png" alt="G.R.A.S.Y.A. Logo" class="nav-logo">
+        <span>G.R.A.S.Y.A.</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="team.html">Team</a>
+        <a href="manual.html" class="active">Manual</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span aria-hidden="true">☰</span>
+    </button>
+</nav>
+
+<main>
+    <header class="page-header manual-header">
+        <h1>User Manual</h1>
+        <p class="manual-subtitle">Running a PostgreSQL → MongoDB migration with GRASYA Enterprise Manager v2.2.0</p>
+    </header>
+
+    <section class="manual-stepper-wrap" aria-label="Migration workflow">
+        <ol class="manual-stepper">
+            <li><a href="#prepare"><span class="step-num">1</span><span class="step-label">Prepare</span></a></li>
+            <li><a href="#connect"><span class="step-num">2</span><span class="step-label">Connect</span></a></li>
+            <li><a href="#tables"><span class="step-num">3</span><span class="step-label">Configure</span></a></li>
+            <li><a href="#run"><span class="step-num">4</span><span class="step-label">Run &amp; Control</span></a></li>
+            <li><a href="#history"><span class="step-num">5</span><span class="step-label">Review &amp; Recover</span></a></li>
+        </ol>
+    </section>
+
+    <div class="manual-layout">
+
+        <aside class="manual-toc" aria-label="On this page">
+            <details open id="tocDetails">
+                <summary>On this page</summary>
+                <div id="manualToc" class="toc-links">
+                    <a href="#prepare">Prepare the databases</a>
+                    <a href="#connect">Migration Wizard</a>
+                    <a href="#tables">Tables &amp; relationships</a>
+                    <a href="#calculated">Calculated fields</a>
+                    <a href="#run">Start &amp; monitor</a>
+                    <a href="#controls">Migration controls</a>
+                    <a href="#history">ERD, logs, DLQ &amp; history</a>
+                    <a href="#resume">Resuming a migration</a>
+                    <a href="#troubleshooting">Troubleshooting</a>
+                    <a href="#safety">Safety &amp; glossary</a>
+                </div>
+            </details>
+        </aside>
+
+        <div class="manual-content">
+
+            <!-- PREPARE -->
+            <article class="card manual-card" id="prepare">
+                <span class="manual-stage">Stage 1 · Prepare</span>
+                <h2>Prepare PostgreSQL and MongoDB</h2>
+                <p>Before you open GRASYA, ask your database administrators to confirm a few things.</p>
+                <div class="manual-two-col">
+                    <div>
+                        <h4>PostgreSQL (source)</h4>
+                        <ul class="manual-list">
+                            <li>Logical replication is supported and enabled.</li>
+                            <li>The login can read the schema you want to migrate.</li>
+                            <li>The replication account can create or use the publication and slot.</li>
+                            <li>Tables have primary keys.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>MongoDB (target)</h4>
+                        <ul class="manual-list">
+                            <li>The connection URI is reachable from the GRASYA cloud service.</li>
+                            <li>The account can create, read, update and delete data.</li>
+                            <li>The target database name is approved and has enough storage.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CONNECT -->
+            <article class="card manual-card" id="connect">
+                <span class="manual-stage">Stage 2 · Connect</span>
+                <h2>Connect through the Migration Wizard</h2>
+                <div class="manual-split split-stack">
+                    <div>
+                        <p>Select <b>Connect</b> on the toolbar. <b>Next</b> checks each connection before moving on.</p>
+                        <ol class="mini-steps">
+                            <li><b>Source</b><span>PostgreSQL host, port, database, schema, login, SSL</span></li>
+                            <li><b>Target</b><span>MongoDB URI and target database name</span></li>
+                            <li><b>Capture</b><span>Keep the values your administrator provided</span></li>
+                            <li><b>Review</b><span>Check everything, then <b>Finish</b></span></li>
+                        </ol>
+                        <p class="manual-note"><b>Finish</b> saves the configuration. It does not start copying data yet.</p>
+                    </div>
+                    <a href="assets/manual/figure-04-page-11.png" target="_blank" rel="noopener" class="manual-figure">
+                        <img src="assets/manual/figure-04-page-11.png" alt="Migration Wizard step 1: entering the PostgreSQL source connection">
+                        <span>Step 1: entering the PostgreSQL source connection</span>
+                    </a>
+                </div>
+                <details class="manual-more">
+                    <summary>Show more: capture settings and the Review page</summary>
+                    <div class="manual-split split-stack">
+                        <ul class="manual-list">
+                            <li><b>Topic Prefix, Publication Name, Slot Name:</b> identifiers used by the managed capture service. Concurrent migrations on the same source need different slot names.</li>
+                            <li><b>Included Schema:</b> should match the source schema unless an administrator says otherwise.</li>
+                            <li><b>Replication User / Password:</b> PostgreSQL credentials allowed to use logical replication.</li>
+                            <li><b>Review page:</b> double-check the target database, schema and detected tables. Use <b>Back</b> to fix anything.</li>
+                        </ul>
+                        <a href="assets/manual/figure-07-page-14.png" target="_blank" rel="noopener" class="manual-figure">
+                            <img src="assets/manual/figure-07-page-14.png" alt="Migration Wizard Review page" loading="lazy">
+                            <span>The Review page before selecting Finish</span>
+                        </a>
+                    </div>
+                </details>
+            </article>
+
+            <!-- CONFIGURE -->
+            <article class="card manual-card" id="tables">
+                <span class="manual-stage">Stage 3 · Configure</span>
+                <h2>Tables and relationships</h2>
+                <div class="manual-split">
+                    <div>
+                        <ul class="manual-list">
+                            <li>GRASYA includes <b>every table</b> in the selected schema. Wrong tables? Go back and pick the right schema.</li>
+                            <li>Check the <b>ERD Diagram</b> tab to confirm tables and foreign-key links were found.</li>
+                            <li>Open <b>MongoDB Relationship Mapping</b>, choose a mapping for each relationship, then <b>Apply</b>.</li>
+                        </ul>
+                        <div class="manual-two-col">
+                            <div class="mini-card">
+                                <h4>Embedded</h4>
+                                <p>Child data is stored inside the parent document. Good when you always read them together.</p>
+                            </div>
+                            <div class="mini-card">
+                                <h4>Referenced <span class="tag">default</span></h4>
+                                <p>Related data stays in its own collection, linked by ID. Good for data that grows or is used on its own.</p>
+                            </div>
+                        </div>
+                        <p class="manual-note">Mappings can't change while a migration runs, so set them before <b>Run</b>.</p>
+                    </div>
+                    <a href="assets/manual/figure-09-page-16.png" target="_blank" rel="noopener" class="manual-figure">
+                        <img src="assets/manual/figure-09-page-16.png" alt="MongoDB Relationship Mapping panel">
+                        <span>Choosing Embedded or Referenced</span>
+                    </a>
+                </div>
+            </article>
+
+            <article class="card manual-card" id="calculated">
+                <span class="manual-stage">Stage 3 · Configure</span>
+                <h2>Calculated fields</h2>
+                <div class="manual-split">
+                    <div>
+                        <p>Recompute generated or derived columns that PostgreSQL doesn't send in live changes.</p>
+                        <ul class="manual-list">
+                            <li>Select <b>Calculated Fields</b> on the toolbar before running.</li>
+                            <li>Detected generated columns appear with a suggested expression, already enabled.</li>
+                            <li>Use the checkbox to include a row, <b>+ Add field</b> for your own, and the trash icon to remove one.</li>
+                            <li>Select <b>Apply</b>. Invalid expressions are highlighted so you can fix them.</li>
+                        </ul>
+                    </div>
+                    <div class="mini-card">
+                        <h4>Supported functions</h4>
+                        <p class="code-chips"><code>lower</code> <code>upper</code> <code>round</code> <code>abs</code> <code>len</code> <code>min</code> <code>max</code> <code>concat</code> <code>coalesce</code></p>
+                        <p class="manual-note" style="margin-top: 0.75rem;">Plus basic arithmetic and comparisons. Calculated fields can't change while a migration is running.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- RUN -->
+            <article class="card manual-card" id="run">
+                <span class="manual-stage">Stage 4 · Run &amp; Control</span>
+                <h2>Start and monitor a migration</h2>
+                <div class="manual-split split-stack">
+                    <div>
+                        <p>Check the databases, table list, relationship mappings and calculated fields, then select <b>Run</b>. The <b>Monitor</b> tab opens automatically.</p>
+                        <ol class="phase-chips">
+                            <li><b>Snapshot</b><span>Existing rows copied to staging</span></li>
+                            <li><b>Verification gate</b><span>Schema and data checked</span></li>
+                            <li><b>Transform</b><span>Rows turned into documents</span></li>
+                            <li><b>CDC</b><span>Live changes keep flowing (Phase2)</span></li>
+                        </ol>
+                        <p class="manual-note">Keep the <b>Logs</b> tab open: blue = info, green = success, yellow = warning, red = error.</p>
+                    </div>
+                    <a href="assets/manual/figure-11-page-20.png" target="_blank" rel="noopener" class="manual-figure">
+                        <img src="assets/manual/figure-11-page-20.png" alt="Monitor view during a running migration">
+                        <span>The Monitor view during a running migration</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- CONTROLS -->
+            <article class="card manual-card" id="controls">
+                <span class="manual-stage">Stage 4 · Run &amp; Control</span>
+                <h2>Migration controls</h2>
+                <div class="control-grid">
+                    <div class="control-tile"><h4>Pause / Resume</h4><span class="when">While running</span><p>Temporarily stops processing, then continues.</p></div>
+                    <div class="control-tile"><h4>Verify</h4><span class="when">During CDC</span><p>Checks schema drift and data consistency. Resumes only if clean.</p></div>
+                    <div class="control-tile tile-success"><h4>Finish Migration</h4><span class="when">During CDC</span><p>Final check, then completes the migration. Use this for success.</p></div>
+                    <div class="control-tile"><h4>Disconnect</h4><span class="when">While connected</span><p>Stops the run but keeps MongoDB data so you can resume later.</p></div>
+                    <div class="control-tile tile-danger"><h4>Cancel</h4><span class="when">While running</span><p>Stops the run and <b>drops the whole target database</b>. Can't be undone.</p></div>
+                </div>
+                <div class="manual-split split-stack">
+                    <div>
+                        <div class="callout callout-danger">
+                            <strong>Need to stop but keep your data?</strong> Use <b>Disconnect</b>, not Cancel.
+                        </div>
+                        <h4>Why is a button disabled?</h4>
+                        <ul class="manual-list">
+                            <li><b>Run</b> needs a finished wizard and no migration already running.</li>
+                            <li><b>Pause/Resume</b> and <b>Cancel</b> need a running migration.</li>
+                            <li><b>Verify</b> and <b>Finish</b> only work in the CDC phase.</li>
+                            <li><b>Apply</b> buttons are disabled while running or verifying.</li>
+                        </ul>
+                    </div>
+                    <a href="assets/manual/figure-13-page-24.png" target="_blank" rel="noopener" class="manual-figure">
+                        <img src="assets/manual/figure-13-page-24.png" alt="Migration toolbar controls">
+                        <span>The migration controls on the toolbar</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- REVIEW & RECOVER: pair -->
+            <div class="manual-row">
+                <article class="card manual-card" id="history">
+                    <span class="manual-stage">Stage 5 · Review &amp; Recover</span>
+                    <h2>ERD, logs, DLQ and history</h2>
+                    <ul class="manual-list">
+                        <li><b>ERD Diagram:</b> view tables, columns and foreign keys. It's read-only.</li>
+                        <li><b>Logs:</b> the first place to look when something is slow or fails.</li>
+                        <li><b>DLQ:</b> events GRASYA couldn't process. Click a row for details. There's no automatic replay.</li>
+                        <li><b>Migration History:</b> past runs with <b>Logs</b>, <b>Resume</b> and <b>Delete</b>.</li>
+                    </ul>
+                    <div class="status-pills">
+                        <span class="pill pill-running">Running</span>
+                        <span class="pill pill-finished">Finished</span>
+                        <span class="pill pill-halted">Halted</span>
+                        <span class="pill pill-cancelled">Cancelled</span>
+                        <span class="pill pill-failed">Failed</span>
+                    </div>
+                    <div class="callout callout-warn">
+                        History never stores passwords or the MongoDB URI. You'll re-enter them when resuming.
+                    </div>
+                </article>
+
+                <article class="card manual-card" id="resume">
+                    <span class="manual-stage">Stage 5 · Review &amp; Recover</span>
+                    <h2>Resume an interrupted migration</h2>
+                    <ol class="manual-numbered">
+                        <li>Make sure the cloud service is reachable and nothing else is connected.</li>
+                        <li>Open <b>Migration History</b> and find the <b>Halted</b> entry.</li>
+                        <li>Select <b>Resume</b> and review the prefilled settings.</li>
+                        <li>Re-enter both passwords and the MongoDB URI.</li>
+                        <li>Finish the wizard, check mappings and calculated fields.</li>
+                        <li>Select <b>Run</b>. GRASYA continues from where it stopped.</li>
+                    </ol>
+                    <details class="manual-more">
+                        <summary>Show more: other statuses and missing slots</summary>
+                        <ul class="manual-list">
+                            <li>Only <b>Halted</b> runs truly resume. Other statuses start a fresh run, which may copy all rows again.</li>
+                            <li>If the replication slot is gone, GRASYA offers <b>Restart as fresh migration</b>. Only use it if a new full snapshot is acceptable.</li>
+                        </ul>
+                    </details>
+                </article>
+            </div>
+
+            <!-- TROUBLESHOOTING -->
+            <article class="card manual-card" id="troubleshooting">
+                <span class="manual-stage">Help</span>
+                <h2>Troubleshooting</h2>
+                <div class="faq">
+                    <details><summary>Red status bar / "No connection to server"</summary><p>Check your internet or VPN, and whether a firewall or proxy blocks GRASYA. Wait for the retry countdown or select <b>Retry</b>. If a run was active, check History afterwards; it may be marked Halted.</p></details>
+                    <details><summary>PostgreSQL connection fails</summary><p>Check host, port, database, schema, username, password and the SSL setting. The server must accept connections from the GRASYA cloud service. Don't keep guessing passwords; ask the administrator.</p></details>
+                    <details><summary>MongoDB connection fails</summary><p>Check the full URI, target database name, TLS and auth options, and trusted-IP rules. Special characters in passwords may need URI encoding. Never share the full URI.</p></details>
+                    <details><summary>No tables are detected</summary><p>Check the database and schema name (spelling and letter case), and that the account can read schema metadata.</p></details>
+                    <details><summary>Capture or permission error</summary><p>Ask the PostgreSQL administrator to confirm logical replication, the replication login, slot and publication permissions, and that the slot name isn't in use.</p></details>
+                    <details><summary>DLQ entries appear</summary><p>Open the DLQ tab, note the time, phase, table/topic and error, check the logs, and fix the cause with your administrator. Entries are not retried automatically.</p></details>
+                    <details><summary>Verify reports schema drift or mismatches</summary><p>Leave the migration paused, read the per-table logs, check for schema changes and DLQ entries, and verify again once fixed. Don't Finish until verification is clean.</p></details>
+                    <details><summary>A toolbar button is disabled</summary><p>See "Why is a button disabled?" under <a href="#controls">Migration controls</a>, and check the Monitor logs and status bar.</p></details>
+                    <details><summary>Migration won't resume after a restart</summary><p>Use the Halted entry in History and re-enter credentials. If the replication slot is missing, see <a href="#resume">Resume an interrupted migration</a>.</p></details>
+                </div>
+            </article>
+
+            <!-- SAFETY -->
+            <article class="card manual-card" id="safety">
+                <span class="manual-stage">Help</span>
+                <h2>Data safety and glossary</h2>
+                <div class="checklist-grid">
+                    <div class="mini-card"><h4>Before connecting</h4><ul class="check-list"><li>Dedicated MongoDB target</li><li>Hostnames, ports and schemas verified</li><li>Least-privilege accounts</li></ul></div>
+                    <div class="mini-card"><h4>Before Run</h4><ul class="check-list"><li>Table list reviewed</li><li>Relationships and calculated fields applied</li><li>Target has enough storage</li></ul></div>
+                    <div class="mini-card"><h4>Before Verify / Finish</h4><ul class="check-list"><li>DLQ and logs reviewed</li><li>Drift and mismatches resolved</li><li>Downstream users ready</li></ul></div>
+                    <div class="mini-card mini-card-danger"><h4>Before Cancel</h4><ul class="check-list"><li>Read the dialog fully</li><li>Target database name checked</li><li>Use Disconnect if you may resume</li></ul></div>
+                </div>
+                <div class="callout callout-warn">
+                    Never put passwords, full MongoDB URIs, keys or sensitive DLQ rows in screenshots or shared documents.
+                </div>
+                <details class="manual-more">
+                    <summary>Show glossary</summary>
+                    <dl class="glossary">
+                        <div><dt>CDC</dt><dd>Change Data Capture: streaming inserts, updates and deletes after the snapshot.</dd></div>
+                        <div><dt>Collection</dt><dd>A group of MongoDB documents, similar to a table.</dd></div>
+                        <div><dt>DLQ</dt><dd>Dead Letter Queue: events GRASYA couldn't process.</dd></div>
+                        <div><dt>Embedded</dt><dd>Child data stored inside the parent document.</dd></div>
+                        <div><dt>ERD</dt><dd>Diagram of tables, columns and relationships.</dd></div>
+                        <div><dt>Merkle verification</dt><dd>Chunk-based hash comparison of source and staged data.</dd></div>
+                        <div><dt>Publication</dt><dd>PostgreSQL definition of which changes are captured.</dd></div>
+                        <div><dt>Referenced</dt><dd>Related documents kept in separate collections, linked by ID.</dd></div>
+                        <div><dt>Replication slot</dt><dd>Keeps the change-stream position so a run can resume.</dd></div>
+                        <div><dt>Schema</dt><dd>A PostgreSQL namespace containing tables.</dd></div>
+                        <div><dt>Schema drift</dt><dd>A structure change in PostgreSQL during migration.</dd></div>
+                        <div><dt>Snapshot</dt><dd>The initial copy of existing rows.</dd></div>
+                        <div><dt>Staging</dt><dd>Internal MongoDB area used for transformation and verification.</dd></div>
+                    </dl>
+                </details>
+            </article>
+
+        </div>
+    </div>
+
+    <section class="manual-cta">
+        <h2>Need the full details?</h2>
+        <p>The complete manual covers installation, requirements and every setting in depth.</p>
+        <a href="assets/docs/GRASYA-Enterprise-Manager-User-Manual-v2.2.0.pdf" download class="btn-primary">Download full manual (PDF)</a>
+        <span class="cta-meta">Version 2.2.0 · PDF · 1.2 MB</span>
+    </section>
+</main>
+
+<footer>
+    <p>© <span id="current-year"></span> G.R.A.S.Y.A. Framework</p>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged screenshot">
+    <button class="lightbox-close" type="button">Close ✕</button>
+    <img alt="">
+    <p></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
