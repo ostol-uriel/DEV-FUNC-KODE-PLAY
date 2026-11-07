@@ -16,7 +16,7 @@
         <img src="assets/logo/DFKP - LOGO W TEXT.png" alt="G.R.A.S.Y.A. Logo" class="nav-logo">
         <span>G.R.A.S.Y.A.</span>
     </div>
-    
+
     <div class="nav-links" id="navLinks">
         <a href="index.html" class="active">Home</a>
         <a href="about.html">About</a>
@@ -31,43 +31,110 @@
 <main>
     <header class="hero">
         <div class="glow-orb"></div>
-        
+
         <div class="hero-content">
             <div class="hero-badge fade-element delay-1">
                 <span class="pulse"></span> From curious play to subtle grace
             </div>
-            
+
             <h1 class="fade-element delay-2">G.R.A.S.Y.A.</h1>
             <p class="fade-element delay-3">Gradual Reconciliation and Scalable Yield Architecture</p>
-            
-            <div class="hero-buttons fade-element delay-4">
-                <a href="https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases/download/v1.0.0/GRASYA.Enterprise.Manager.Setup.2.2.0.exe" class="btn-primary">Download Installer</a>
-                <a href="https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases/download/v1.0.0/GRASYA.Enterprise.Manager.2.2.0.exe" class="btn-secondary">Download Portable</a>
+
+            <div class="hero-download fade-element delay-4">
+                <a href="https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases/download/v1.0.0/GRASYA.Enterprise.Manager.Setup.2.2.0.exe" class="btn-primary btn-download" id="heroDownload" data-install="installer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+                    <span>Download for Windows</span>
+                </a>
+                <p class="download-meta" id="heroMeta">v2.2.0 · Installer · 507 MB</p>
+                <p class="download-alt" id="heroAlt"><a href="#downloads">Portable version</a> · <a href="#downloads">Linux</a> · <a href="#downloads">All downloads ↓</a></p>
             </div>
-            <div class="hero-buttons fade-element delay-4" style="margin-top: 1rem;">
-                <a href="#architecture" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Explore Framework</a>
+            <div class="hero-links fade-element delay-4">
+                <a href="#before-install">What you need before installing ↓</a>
+                <a href="#architecture">Explore Framework</a>
             </div>
 
-            <div class="terminal-window fade-element delay-5">
-                <div class="terminal-header">
-                    <span class="dot red"></span>
-                    <span class="dot yellow"></span>
-                    <span class="dot green"></span>
-                </div>
-                <div class="terminal-body">
-                    <p class="typewriter"><span>> docker compose up -d</span></p>
-                    <p class="typewriter"><span>> Container kafka Started</span></p>
-                    <p class="typewriter"><span>> Container connect Started</span></p>
-                    <p class="typewriter"><span>> curl -X POST http://localhost:8000/connectors</span></p>
-                    <p class="typewriter"><span>> Connector 'ecommerce-postgres-source' created </span></p> 
-                    <p class="typewriter"><span>> kafka-console-consumer.sh --topic </span></p>
-                    <p class="typewriter" style="color: var(--accent);"><span>> Data pipeline active.</span></p>
-                </div>
+            <!-- Migration log (typed by script.js) -->
+            <div class="log-terminal fade-element delay-5" id="heroLog">
+                <div class="log-body" role="log" aria-label="Example GRASYA migration log"></div>
             </div>
+
         </div>
     </header>
 
-    <section id="architecture" class="section">
+    <section id="before-install" class="section alt install-info">
+        <h2>Before You Install</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Purpose</h3>
+                <p>Moves data from a PostgreSQL source to a MongoDB target, then keeps applying new inserts, updates and deletes until you're ready to finish. Foreign keys become embedded documents or references, and the data is verified before you complete the migration.</p>
+            </div>
+            <div class="card">
+                <h3>Intended Users</h3>
+                <p>Database operators, database administrators, migration administrators and technical users who monitor and complete a migration.</p>
+                <p>Basic database knowledge (host, port, schema, collection) is all you need.</p>
+            </div>
+            <div class="card">
+                <h3>Client System</h3>
+                <p>A 64-bit Windows or Linux computer running the installer, portable app or AppImage, with:</p>
+                <ul class="check-list">
+                    <li>Permission to install or run the app</li>
+                    <li>A reliable internet connection</li>
+                    <li>Correct system date and time</li>
+                    <li>Access to any required VPN</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Network Requirements</h3>
+                <p>The GRASYA cloud service must reach both databases, not just your desktop:</p>
+                <ul class="check-list">
+                    <li>Database hosts and ports are reachable</li>
+                    <li>Firewall, trusted-IP and VPN rules are active</li>
+                    <li>TLS certificates are valid</li>
+                    <li>Accounts may connect from GRASYA</li>
+                </ul>
+                <p class="card-note">Avoid <b>localhost</b> unless your provider set up a tunnel.</p>
+            </div>
+        </div>
+        <p class="install-foot">Cloud services are run by the GRASYA provider. <a href="manual.html#prepare">See what connection details to collect in the Manual →</a></p>
+    </section>
+
+    <section id="downloads" class="section">
+        <h2>Downloads</h2>
+        <div class="grid download-grid">
+            <div class="card dl-card" data-os="windows">
+                <div class="dl-head"><h3>Windows</h3><span class="your-system">Your system</span></div>
+                <p class="dl-sub">64-bit Windows · pick one</p>
+                <div class="dl-option">
+                    <div><b>Installer</b><span class="pill pill-finished">Recommended</span><small>Installs GRASYA with a Start-menu shortcut. <span data-size="installer"></span></small></div>
+                    <a class="btn-primary" data-build="installer">Download</a>
+                </div>
+                <div class="dl-option">
+                    <div><b>Portable</b><small>Runs from any folder, nothing installed. <span data-size="portable"></span></small></div>
+                    <a class="btn-secondary" data-build="portable">Download</a>
+                </div>
+                <details class="dl-steps">
+                    <summary>How to install</summary>
+                    <h4>Installer</h4><div data-steps="installer"></div>
+                    <h4>Portable</h4><div data-steps="portable"></div>
+                </details>
+            </div>
+            <div class="card dl-card" data-os="linux">
+                <div class="dl-head"><h3>Linux</h3><span class="your-system">Your system</span></div>
+                <p class="dl-sub">64-bit Linux · single-file app</p>
+                <div class="dl-option">
+                    <div><b>AppImage</b><small>Mark it as executable, then run it. <span data-size="appimage"></span></small></div>
+                    <a class="btn-primary" data-build="appimage">Download</a>
+                </div>
+                <details class="dl-steps">
+                    <summary>How to run</summary>
+                    <div data-steps="appimage"></div>
+                </details>
+            </div>
+        </div>
+        <p class="dl-foot" id="dlFoot"></p>
+    </section>
+
+    <section id="architecture" class="section alt">
         <h2>Core Methodology</h2>
         <div class="grid">
             <div class="card">
@@ -85,7 +152,7 @@
         </div>
     </section>
 
-    <section class="section alt">
+    <section class="section">
         <h2>System Features</h2>
         <div class="grid">
             <div class="card">
@@ -111,6 +178,24 @@
 <footer>
     <p>© <span id="current-year"></span> G.R.A.S.Y.A. Framework</p>
 </footer>
+
+<dialog class="install-modal" id="installModal" aria-labelledby="installTitle">
+    <div class="modal-inner">
+        <button type="button" class="modal-x" data-close aria-label="Close">×</button>
+        <span class="manual-stage">Your download is starting</span>
+        <h2 id="installTitle">Installing GRASYA</h2>
+        <p class="modal-lead"><span id="modalFile"></span><br>Didn't start? <a id="modalRetry" href="#">Download again</a></p>
+        <div id="modalSteps"></div>
+
+        <h4>After GRASYA opens</h4>
+        <div id="modalAfter"></div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" data-close>Close</button>
+            <a href="manual.html#prepare" class="btn-primary">Open the Manual</a>
+        </div>
+    </div>
+</dialog>
 
 <script src="script.js"></script>
 </body>
