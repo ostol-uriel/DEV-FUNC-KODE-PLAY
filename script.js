@@ -218,14 +218,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // HOME: DOWNLOADS — one place to update each release
-    const RELEASE_BASE = "https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases/download/v1.0.0/";
+    const RELEASE_BASE = "https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases/download/v2.2.0/";
     const DOWNLOADS = {
         version: "2.2.0",
-        released: "May 2026",
+        released: "November 2026",
         releasesUrl: "https://github.com/ostol-uriel/DEV-FUNC-KODE-PLAY/releases",
         builds: {
             installer: {
-                os: "windows", title: "Windows Installer", label: "Installer", size: "507 MB",
+                os: "windows", title: "Windows Installer", label: "Installer", size: "141 MB",
                 file: "GRASYA.Enterprise.Manager.Setup.2.2.0.exe",
                 url: RELEASE_BASE + "GRASYA.Enterprise.Manager.Setup.2.2.0.exe",
                 steps: [
@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 note: "If Windows shows a security prompt, check that the publisher and file source match what your organization supplied. If they don't, cancel and contact support."
             },
             portable: {
-                os: "windows", title: "Windows Portable", label: "Portable", size: "507 MB",
+                os: "windows", title: "Windows Portable", label: "Portable", size: "141 MB",
                 file: "GRASYA.Enterprise.Manager.2.2.0.exe",
                 url: RELEASE_BASE + "GRASYA.Enterprise.Manager.2.2.0.exe",
                 steps: [
@@ -247,9 +247,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 note: "Your organization's endpoint-security system may still need to approve the app before it runs."
             },
             appimage: {
-                os: "linux", title: "Linux AppImage", label: "AppImage", size: null,
+                os: "linux", title: "Linux AppImage", label: "AppImage", size: "178 MB",
                 file: "GRASYA.Enterprise.Manager-2.2.0.AppImage",
-                url: null, // TODO: set url and size once the AppImage is uploaded to the GitHub release
+                url: RELEASE_BASE + "GRASYA.Enterprise.Manager-2.2.0.AppImage",
                 steps: [
                     "Open the folder that contains the downloaded <b>.AppImage</b>.",
                     "Mark it as executable: <b>Properties → Permissions → Allow executing as program</b> (or <code>chmod +x</code>).",
