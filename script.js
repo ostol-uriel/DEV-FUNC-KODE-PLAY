@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // OPTIMIZED FADE-IN ANIMATION FOR SCROLLING CARDS
-    const cards = document.querySelectorAll(".section .card");
+    const cards = document.querySelectorAll(".section .card, .manual-card");
 
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
